@@ -7,5 +7,6 @@
   },
   "[toml]": {
     "editor.defaultFormatter": "bodil.prettier-toml"
-  }
+  },
+  "rust-analyzer.linkedProjects": ["./projects/1-cli/jira-clone/Cargo.toml"]
 }
