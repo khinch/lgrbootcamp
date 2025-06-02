@@ -4,13 +4,13 @@ Repo for Lets Get Rusty bootcamp
 
 # Extensions
 
-## Configured Extensions
+## Configured VS Code Extensions
 
 -   Prettier (prettier)
 -   Prettier (Rust) (jinxdash)
 -   Prettier TOML (Bodil Stokke)
 
-## Suggested Extensions
+## Suggested VS Code Extensions
 
 -   Dependi (Fill Labs)
 -   Error Lens (Alexander)
