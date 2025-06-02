@@ -1,3 +1,4 @@
+use std::any::Any;
 use std::rc::Rc;
 
 use anyhow::Result;
@@ -13,6 +14,7 @@ use page_helpers::*;
 pub trait Page {
     fn draw_page(&self) -> Result<()>;
     fn handle_input(&self, input: &str) -> Result<Option<Action>>;
+    fn as_any(&self) -> &dyn Any;
 }
 
 pub struct HomePage {
@@ -61,6 +63,10 @@ impl Page for HomePage {
                 }
             }
         }
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 
@@ -148,6 +154,10 @@ impl Page for EpicDetail {
             }
         }
     }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
 }
 
 pub struct StoryDetail {
@@ -169,10 +179,11 @@ impl Page for StoryDetail {
 
         // TODO: print out story details using get_column_string()
         println!(
-            "{:<8} | {:<32} | {:<12}",
-            get_column_string(&self.story_id.to_string(), 8),
-            get_column_string(&story.name, 32),
-            get_column_string(&story.status.to_string(), 12)
+            "{:<5} | {:<12} | {:<27} | {:<13}",
+            get_column_string(&self.story_id.to_string(), 5),
+            get_column_string(&story.name, 12),
+            get_column_string(&story.description, 27),
+            get_column_string(&story.status.to_string(), 13)
         );
 
         println!();
@@ -197,6 +208,10 @@ impl Page for StoryDetail {
             })),
             _ => Ok(None),
         }
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 
