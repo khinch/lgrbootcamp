@@ -22,20 +22,23 @@ pub struct HomePage {
 }
 impl Page for HomePage {
     fn draw_page(&self) -> Result<()> {
-        println!("----------------------------- EPICS -----------------------------");
-        println!("     id     |               name               |      status      ");
+        println!(
+            "------------------------------------ EPICS -------------------------------------"
+        );
+        println!(
+            "     ID     |                        Name                          |   Status     "
+        );
 
-        // TODO: print out epics using get_column_string(). also make sure the epics are sorted by id
         let epics = self.db.read_db()?.epics;
         let epic_ids = epics.keys().sorted().collect::<Vec<&u32>>();
 
         for epic_id in epic_ids {
             let epic = epics.get(epic_id).unwrap();
             println!(
-                "{:<8} | {:<30} | {:<16}",
+                "{:>11} | {:<52} | {:<14}",
                 epic_id,
-                get_column_string(&epic.name, 30),
-                get_column_string(&epic.status.to_string(), 16)
+                get_column_string(&epic.name, 52),
+                get_column_string(&epic.status.to_string(), 14)
             );
         }
 
@@ -48,7 +51,6 @@ impl Page for HomePage {
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
-        // todo!() // match against the user input and return the corresponding action. If the user input was invalid return None.
         match input {
             "q" | "Q" => Ok(Some(Action::Exit)),
             "c" | "C" => Ok(Some(Action::CreateEpic)),
@@ -83,24 +85,29 @@ impl Page for EpicDetail {
             .get(&self.epic_id)
             .ok_or_else(|| anyhow!("could not find epic!"))?;
 
-        println!("------------------------------ EPIC ------------------------------");
-        println!("  id  |     name     |         description         |    status    ");
-
-        // TODO: print out epic details using get_column_string()
         println!(
-            "{:<5} | {:<16} | {:<24} | {:<12}",
-            get_column_string(&self.epic_id.to_string(), 5),
-            get_column_string(&epic.name, 16),
-            get_column_string(&epic.description, 24),
-            get_column_string(&epic.status.to_string(), 12)
+            "------------------------------------ EPIC --------------------------------------"
+        );
+        println!(
+            "     ID     |        Name         |          Description           |   Status     "
+        );
+
+        println!(
+            "{:>11} | {:<19} | {:<30} | {:<14}",
+            &self.epic_id,
+            get_column_string(&epic.name, 19),
+            get_column_string(&epic.description, 30),
+            get_column_string(&epic.status.to_string(), 14)
         );
 
         println!();
+        println!(
+            "----------------------------------- STORIES ------------------------------------"
+        );
+        println!(
+            "     ID     |                        Name                          |   Status     "
+        );
 
-        println!("---------------------------- STORIES ----------------------------");
-        println!("     id     |               name               |      status      ");
-
-        // TODO: print out stories using get_column_string(). also make sure the stories are sorted by id
         let stories = &db_state.stories;
         let story_ids = epic.stories.iter().sorted().collect::<Vec<&u32>>();
 
@@ -109,10 +116,10 @@ impl Page for EpicDetail {
                 .get(story_id)
                 .ok_or_else(|| anyhow!("No story with id {}", story_id))?;
             println!(
-                "{:<8} | {:<32} | {:<12}",
-                get_column_string(&story_id.to_string(), 8),
-                get_column_string(&story.name, 32),
-                get_column_string(&story.status.to_string(), 12)
+                "{:>11} | {:<52} | {:<14}",
+                story_id,
+                get_column_string(&story.name, 52),
+                get_column_string(&story.status.to_string(), 14)
             );
         }
 
@@ -127,7 +134,6 @@ impl Page for EpicDetail {
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
-        // todo!() // match against the user input and return the corresponding action. If the user input was invalid return None.
         match input {
             "p" | "P" => Ok(Some(Action::NavigateToPreviousPage)),
             "u" | "U" => Ok(Some(Action::UpdateEpicStatus {
@@ -174,16 +180,18 @@ impl Page for StoryDetail {
             .get(&self.story_id)
             .ok_or_else(|| anyhow!("could not find story!"))?;
 
-        println!("------------------------------ STORY ------------------------------");
-        println!("  id  |     name     |         description         |    status    ");
-
-        // TODO: print out story details using get_column_string()
         println!(
-            "{:<5} | {:<12} | {:<27} | {:<13}",
-            get_column_string(&self.story_id.to_string(), 5),
-            get_column_string(&story.name, 12),
-            get_column_string(&story.description, 27),
-            get_column_string(&story.status.to_string(), 13)
+            "----------------------------------- STORY --------------------------------------"
+        );
+        println!(
+            "     ID     |        Name         |          Description           |   Status     "
+        );
+        println!(
+            "{:>11} | {:<19} | {:<30} | {:<14}",
+            &self.story_id,
+            get_column_string(&story.name, 19),
+            get_column_string(&story.description, 30),
+            get_column_string(&story.status.to_string(), 14)
         );
 
         println!();
@@ -195,8 +203,6 @@ impl Page for StoryDetail {
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
-        // todo!() // match against the user input and return the corresponding action. If the user input was invalid return None.
-        //
         match input {
             "p" | "P" => Ok(Some(Action::NavigateToPreviousPage)),
             "u" | "U" => Ok(Some(Action::UpdateStoryStatus {

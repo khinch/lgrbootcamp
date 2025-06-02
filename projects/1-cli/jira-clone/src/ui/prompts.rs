@@ -44,21 +44,21 @@ fn create_story_prompt() -> Story {
 fn delete_epic_prompt() -> bool {
     println!("----------------------------");
     println!(
-        "Are you sure you want to delete this epic? All stories in this epic will also be deleted [Y/n]: "
+        "Are you sure you want to delete this epic? All stories in this epic will also be deleted [y/N]: "
     );
 
     match get_user_input().as_str() {
-        "y" | "Y" | "" => true,
+        "y" | "Y" => true,
         _ => false,
     }
 }
 
 fn delete_story_prompt() -> bool {
     println!("----------------------------");
-    println!("Are you sure you want to delete this story? [Y/n]: ");
+    println!("Are you sure you want to delete this story? [y/N]: ");
 
     match get_user_input().as_str() {
-        "y" | "Y" | "" => true,
+        "y" | "Y" => true,
         _ => false,
     }
 }
