@@ -1,6 +1,8 @@
 # lgrbootcamp
 
-Repo for Lets Get Rusty bootcamp
+Repo for Lets Get Rusty bootcamp.
+
+In some demo code, `unwrap` is used to keep the code simple and readable. If the demo code is used as a reference for anything serious, the unwraps should be replaced with idiomatic handlers.
 
 # Extensions
 
