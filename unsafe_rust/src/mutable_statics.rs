@@ -17,6 +17,6 @@ pub fn demo_of_mutable_static_variables() {
     }
 
     unsafe {
-        println!("Counter: {:?}", COUNTER); // No longer compiles in 2024
+        println!("Counter: {:?}", COUNTER);
     }
 }
