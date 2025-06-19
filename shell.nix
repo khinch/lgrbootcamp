@@ -1,2 +1,7 @@
 with (import <nixpkgs> {});
-mkShell{}
+mkShell{
+  buildInputs = [
+    postgresql
+    sqlx-cli
+  ];
+}
