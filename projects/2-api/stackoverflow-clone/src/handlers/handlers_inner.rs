@@ -17,17 +17,13 @@ impl HandlerError {
 
 pub async fn create_question(
     question: Question,
-    // We are using a trait object here so that inner handlers do not depend on concrete DAO implementations
     questions_dao: &(dyn QuestionsDao + Sync + Send),
 ) -> Result<QuestionDetail, HandlerError> {
-    // let question = todo!(); // create question using `questions_dao`
     let question = questions_dao.create_question(question).await;
 
     match question {
-        Ok(question) => Ok(question), // todo!(), // return question
+        Ok(question) => Ok(question),
         Err(err) => {
-            // TODO: log err using error! macro
-            // todo!() // return a default internal error using the HandlerError type
             error!("Error creating question");
             trace!("Response: {}", err.to_string());
             Err(HandlerError::default_internal_error())
@@ -38,14 +34,11 @@ pub async fn create_question(
 pub async fn read_questions(
     questions_dao: &(dyn QuestionsDao + Sync + Send),
 ) -> Result<Vec<QuestionDetail>, HandlerError> {
-    // let questions = todo!(); // get questions using `questions_dao`
     let questions = questions_dao.get_questions().await;
 
     match questions {
-        Ok(questions) => Ok(questions), //todo!(), // return questions
+        Ok(questions) => Ok(questions),
         Err(err) => {
-            // TODO: log err using error! macro
-            // todo!() // return a default internal error using the HandlerError type
             error!("Error getting questions");
             trace!("Response: {}", err.to_string());
             Err(HandlerError::default_internal_error())
@@ -57,13 +50,11 @@ pub async fn delete_question(
     question_uuid: QuestionId,
     questions_dao: &(dyn QuestionsDao + Sync + Send),
 ) -> Result<(), HandlerError> {
-    // let result = todo!(); // delete question using `questions_dao`
     let result = questions_dao
         .delete_question(question_uuid.question_uuid)
         .await;
 
     if result.is_err() {
-        // return todo!(); // return a default internal error using the HandlerError type
         return Err(HandlerError::default_internal_error());
     }
 
@@ -74,21 +65,19 @@ pub async fn create_answer(
     answer: Answer,
     answers_dao: &(dyn AnswersDao + Send + Sync),
 ) -> Result<AnswerDetail, HandlerError> {
-    // let answer = todo!(); // create answer using `answers_dao`
     let answer = answers_dao.create_answer(answer).await;
 
     match answer {
-        Ok(answer) => Ok(answer), //todo!(), // return answer
+        Ok(answer) => Ok(answer),
         Err(err) => {
-            // TODO: log err using error! macro
             error!("Error creating answer");
             trace!("Response: {}", err.to_string());
 
             match err {
-                DBError::InvalidUUID(s) => Err(HandlerError::BadRequest(s)), //todo!(), // return a `HandlerError::BadRequest` error passing in s as the string
+                DBError::InvalidUUID(s) => Err(HandlerError::BadRequest(s)),
                 _ => Err(HandlerError::InternalError(
                     "Failed to create answer".to_string(),
-                )), // todo!(), // return a default internal error using the HandlerError type
+                )),
             }
         }
     }
@@ -98,14 +87,11 @@ pub async fn read_answers(
     question_uuid: QuestionId,
     answers_dao: &(dyn AnswersDao + Send + Sync),
 ) -> Result<Vec<AnswerDetail>, HandlerError> {
-    // let answers = todo!(); // get answers using `answers_dao`
     let answers = answers_dao.get_answers(question_uuid.question_uuid).await;
 
     match answers {
-        Ok(answers) => Ok(answers), //todo!(), // return answers
+        Ok(answers) => Ok(answers),
         Err(e) => {
-            // TODO: log err using error! macro
-            // todo!() // return a default internal error using the HandlerError type
             error!("Error getting answers");
             trace!("Response: {}", e.to_string());
             Err(HandlerError::InternalError(e.to_string()))
@@ -117,7 +103,6 @@ pub async fn delete_answer(
     answer_uuid: AnswerId,
     answers_dao: &(dyn AnswersDao + Send + Sync),
 ) -> Result<(), HandlerError> {
-    // let result = todo!(); // delete answer using `answers_dao`
     let result = answers_dao.delete_answer(answer_uuid.answer_uuid).await;
 
     if result.is_err() {
@@ -125,7 +110,7 @@ pub async fn delete_answer(
         trace!("Response: {:?}", result);
         return Err(HandlerError::InternalError(format!(
             "Error getting answers"
-        ))); //todo!(); // return a default internal error using the HandlerError type
+        )));
     }
 
     Ok(())
