@@ -1,7 +1,5 @@
-use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
-
 use crate::{AppState, models::*};
-
+use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 mod handlers_inner;
 
 impl IntoResponse for handlers_inner::HandlerError {

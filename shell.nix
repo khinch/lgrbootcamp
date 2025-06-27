@@ -3,5 +3,6 @@ mkShell{
   buildInputs = [
     postgresql
     sqlx-cli
+    trunk
   ];
 }

@@ -1,27 +1,23 @@
 #[macro_use]
 extern crate log;
-
 extern crate pretty_env_logger;
-
-use std::sync::Arc;
-
 use axum::{
     Router,
+    http::{HeaderValue, Method, header::CONTENT_TYPE},
     routing::{delete, get, post},
 };
 use dotenvy::dotenv;
-
 use persistance::{
     answers_dao::{AnswersDao, AnswersDaoImpl},
     questions_dao::{QuestionsDao, QuestionsDaoImpl},
 };
 use sqlx::postgres::PgPoolOptions;
-
+use std::sync::Arc;
 mod handlers;
 mod models;
 mod persistance;
-
 use handlers::*;
+use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -47,18 +43,22 @@ async fn main() {
         answers_dao: Arc::new(answers_dao),
     };
 
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods([Method::GET, Method::POST, Method::DELETE, Method::OPTIONS])
+        .allow_headers(Any);
+
     let app = Router::new()
         .route("/question", post(create_question))
         .route("/questions", get(read_questions))
         .route("/question", delete(delete_question))
         .route("/answer", post(create_answer))
-        .route("/answers", get(read_answers))
+        .route("/answers", post(read_answers))
         .route("/answer", delete(delete_answer))
-        .with_state(app_state);
+        .with_state(app_state)
+        .layer(cors);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8000").await.unwrap();
 
     axum::serve(listener, app).await.unwrap();
 }
